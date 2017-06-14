@@ -1,15 +1,39 @@
 import { h, render, Component } from "preact"
 import classNames from "classnames"
 
-function hsvToRgb(h,s,v) {
-  return [0,0,0]
+// from https://gist.github.com/mjackson/5311256
+function hsvToRgb(h, s, v) {
+  var r, g, b
+
+  var i = Math.floor(h * 6)
+  var f = h * 6 - i
+  var p = v * (1 - s)
+  var q = v * (1 - f * s)
+  var t = v * (1 - (1 - f) * s)
+
+  switch (i % 6) {
+    case 0: r = v, g = t, b = p; break
+    case 1: r = q, g = v, b = p; break
+    case 2: r = p, g = v, b = t; break
+    case 3: r = p, g = q, b = v; break
+    case 4: r = t, g = p, b = v; break
+    case 5: r = v, g = p, b = q; break
+  }
+
+  return [
+    Math.round(r * 255),
+    Math.round(g * 255),
+    Math.round(b * 255),
+  ]
 }
 
 export default class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      gridSize: 3
+      gridSize: 3,
+      minValue: 0,
+      minSaturation: 0,
     }
   }
 
@@ -22,9 +46,9 @@ export default class Page extends Component {
 
   nextColor() {
     return [
-      Math.floor(Math.random() * 255),
-      Math.floor(Math.random() * 255),
-      Math.floor(Math.random() * 255),
+      Math.random(),
+      Math.random() * (1 - this.state.minSaturation) + this.state.minSaturation,
+      Math.random() * (1 - this.state.minValue) + this.state.minValue,
     ]
   }
 
@@ -32,7 +56,7 @@ export default class Page extends Component {
     let cells = []
     for (let i = 0; i < this.state.gridSize*this.state.gridSize; i++) {
       let size = 100/this.state.gridSize
-      let color = this.nextColor()
+      let color = hsvToRgb(...this.nextColor())
 
       cells.push(<div class="cell" style={{
         width: `${size}%`,
@@ -48,17 +72,48 @@ export default class Page extends Component {
 
   renderGridControls() {
     return <div class="grid_controls">
-      <label>
-        Grid size
-        <input
-          value={this.state.gridSize}
-          onChange={(e) => {
-            this.setState({
-              gridSize: +e.target.value
-            })
-          }}
-          type="range" min="1" max="10" />
-      </label>
+      <button onClick={e => this.forceUpdate()}>Shuffle</button>
+      <div>
+        <label>
+          Grid size
+          <input
+            value={this.state.gridSize}
+            onChange={(e) => {
+              this.setState({
+                gridSize: +e.target.value
+              })
+            }}
+            type="range" min="1" max="10" />
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Min value
+          <input
+            value={this.state.minValue}
+            onChange={(e) => {
+              this.setState({
+                minValue: +e.target.value
+              })
+            }}
+            type="range" min="0" max="1" step="any" />
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Min saturation
+          <input
+            value={this.state.minSaturation}
+            onChange={(e) => {
+              this.setState({
+                minSaturation: +e.target.value
+              })
+            }}
+            type="range" min="0" max="1" step="any" />
+        </label>
+      </div>
 
     </div>
   }
