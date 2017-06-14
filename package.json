@@ -1,0 +1,32 @@
+{
+  "name": "paintcolors",
+  "version": "1.0.0",
+  "description": "<http://leafo.net>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leafo/paintcolors.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leafo/paintcolors/issues"
+  },
+  "homepage": "https://github.com/leafo/paintcolors#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "uglify-js": "^2.8.22"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "preact": "^8.1.0",
+    "preact-router": "^2.5.2",
+    "requirejs": "^2.3.3"
+  }
+}
