@@ -20,15 +20,24 @@ export default class Page extends Component {
     </div>
   }
 
+  nextColor() {
+    return [
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
+    ]
+  }
+
   renderGrid() {
     let cells = []
     for (let i = 0; i < this.state.gridSize*this.state.gridSize; i++) {
       let size = 100/this.state.gridSize
+      let color = this.nextColor()
 
       cells.push(<div class="cell" style={{
         width: `${size}%`,
         height: `${size}%`,
-        backgroundColor: "rgb(29,101,74)",
+        backgroundColor: `rgb(${color.join(", ")})`,
       }}></div>)
     }
 
@@ -38,6 +47,19 @@ export default class Page extends Component {
   }
 
   renderGridControls() {
-    return <div class="grid_controls"></div>
+    return <div class="grid_controls">
+      <label>
+        Grid size
+        <input
+          value={this.state.gridSize}
+          onChange={(e) => {
+            this.setState({
+              gridSize: +e.target.value
+            })
+          }}
+          type="range" min="1" max="10" />
+      </label>
+
+    </div>
   }
 }
