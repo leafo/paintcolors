@@ -1,5 +1,6 @@
 import { h, render, Component } from "preact"
 import classNames from "classnames"
+import {MersenneTwister} from "mersennetwister"
 
 // from https://gist.github.com/mjackson/5311256
 function hsvToRgb(h, s, v) {
@@ -63,10 +64,12 @@ export default class Page extends Component {
       minValue: 0,
       minSaturation: 0,
       mode: "corners",
+      seed: new Date().getTime()
     }
   }
 
   render() {
+    this.generator = new MersenneTwister(this.state.seed)
     this.cache = {}
     return <div class="paintcolors_main">
       {this.renderGrid()}
@@ -78,9 +81,9 @@ export default class Page extends Component {
     let out = []
     for (let i = 0; i < count; i ++) {
       out.push([
-        Math.random(),
-        Math.random() * (1 - this.state.minSaturation) + this.state.minSaturation,
-        Math.random() * (1 - this.state.minValue) + this.state.minValue,
+        this.generator.real(),
+        this.generator.real() * (1 - this.state.minSaturation) + this.state.minSaturation,
+        this.generator.real() * (1 - this.state.minValue) + this.state.minValue,
       ])
     }
 
@@ -116,6 +119,12 @@ export default class Page extends Component {
 
         return mixColors(leftColor, rightColor, x)
     }
+  }
+
+  shuffle() {
+    this.setState({
+      seed: new Date().getTime()
+    })
   }
 
   renderGrid() {
@@ -164,7 +173,7 @@ export default class Page extends Component {
 
   renderGridControls() {
     return <div class="grid_controls">
-      <button onClick={e => this.forceUpdate()}>Shuffle</button>
+      <button onClick={e => this.shuffle()}>Shuffle</button>
       <div>
         {this.renderSlider({
           label: "Grid size",
