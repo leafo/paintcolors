@@ -35,18 +35,18 @@ function mixColors(a, b, r) {
   let h1 = a[0]
   let h2 = b[0]
 
-  if (Math.abs(h1 - h2) > 180) {
+  if (Math.abs(h1 - h2) > 0.5) {
     if (h1 < h2) {
-      h1 += 360
+      h1 += 1
     } else {
-      h2 += 360
+      h2 += 1
     }
   }
 
   let h = h1 * r + h2 * (1 - r)
 
-  if (h > 360) {
-    h -= 360
+  while (h > 1) {
+    h -= 1
   }
 
   let s = a[1] * r + b[1] * (1 - r)
@@ -94,6 +94,15 @@ export default class Page extends Component {
       case "corners":
         if (!this.cache.corners) {
           this.cache.corners = this.getNColors(4)
+
+          // buggy colors, we end up making a shorter path going the oposite
+          // direction. Mix colors should have ability to specify direction
+          // this.cache.corners = [
+          //   [266/360, 60/100, 49/100],
+          //   [130/360, 47/100, 77/100],
+          //   [335/360, 70/100, 55/100],
+          //   [323/360, 97/100, 23/100],
+          // ]
         }
 
         let [tl, tr, bl, br] = this.cache.corners
@@ -101,10 +110,11 @@ export default class Page extends Component {
         let x = (i % this.state.gridSize) / (this.state.gridSize - 1)
         let y = Math.floor(i / this.state.gridSize) / (this.state.gridSize - 1)
 
-        // mix x component
-        let topColor = mixColors(tl, tr, x)
-        let bottomColor = mixColors(bl, br, x)
-        return mixColors(topColor, bottomColor, y)
+        // mix y
+        let leftColor = mixColors(tl, bl, y)
+        let rightColor = mixColors(tr, br, y)
+
+        return mixColors(leftColor, rightColor, x)
     }
   }
 
@@ -160,7 +170,7 @@ export default class Page extends Component {
           label: "Grid size",
           field: "gridSize",
           min: 1,
-          max: 10,
+          max: 20,
         })}
       </div>
 
