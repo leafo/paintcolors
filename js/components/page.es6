@@ -70,6 +70,14 @@ export default class Page extends Component {
     </div>
   }
 
+  stateSetter(field) {
+    return (e) => {
+      this.setState({
+        [field]: +e.target.value
+      })
+    }
+  }
+
   renderGridControls() {
     return <div class="grid_controls">
       <button onClick={e => this.forceUpdate()}>Shuffle</button>
@@ -78,11 +86,8 @@ export default class Page extends Component {
           Grid size
           <input
             value={this.state.gridSize}
-            onChange={(e) => {
-              this.setState({
-                gridSize: +e.target.value
-              })
-            }}
+            onInput={this.stateSetter("gridSize")}
+            onChange={this.stateSetter("gridSize")}
             type="range" min="1" max="10" />
         </label>
       </div>
@@ -92,11 +97,8 @@ export default class Page extends Component {
           Min value
           <input
             value={this.state.minValue}
-            onChange={(e) => {
-              this.setState({
-                minValue: +e.target.value
-              })
-            }}
+            onInput={this.stateSetter("minValue")}
+            onChange={this.stateSetter("minValue")}
             type="range" min="0" max="1" step="any" />
         </label>
       </div>
@@ -106,11 +108,8 @@ export default class Page extends Component {
           Min saturation
           <input
             value={this.state.minSaturation}
-            onChange={(e) => {
-              this.setState({
-                minSaturation: +e.target.value
-              })
-            }}
+            onInput={this.stateSetter("minSaturation")}
+            onChange={this.stateSetter("minSaturation")}
             type="range" min="0" max="1" step="any" />
         </label>
       </div>
