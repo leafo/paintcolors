@@ -18,7 +18,28 @@ body {
     box-shadow: 0 0 0 5px rgba(255, 255,255, 0.2);
 
     > .cell {
-        display: inline-block;
+        display: inline-flex;
         font-size: 16px;
+        align-items: center;
+        justify-content: center;
+        font-family: monospace;
+
+        &:hover {
+            > * {
+                opacity: 1.0
+            }
+        }
+
+        > * {
+            transition: opacity 0.2s ease;
+            opacity: 0;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: black;
+        }
     }
 }

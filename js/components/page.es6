@@ -56,13 +56,22 @@ export default class Page extends Component {
     let cells = []
     for (let i = 0; i < this.state.gridSize*this.state.gridSize; i++) {
       let size = 100/this.state.gridSize
-      let color = hsvToRgb(...this.nextColor())
+      let color = this.nextColor()
+
+      let renderColor = color.map((v) => v.toFixed(3))
+      renderColor[0] = Math.floor(renderColor[0] * 360)
 
       cells.push(<div class="cell" style={{
         width: `${size}%`,
         height: `${size}%`,
-        backgroundColor: `rgb(${color.join(", ")})`,
-      }}></div>)
+        backgroundColor: `rgb(${hsvToRgb(...color).join(", ")})`,
+      }}>
+        <div>
+          <div>H: {renderColor[0]}</div>
+          <div>S: {renderColor[1]}</div>
+          <div>V: {renderColor[2]}</div>
+        </div>
+      </div>)
     }
 
     return <div class="grid">
