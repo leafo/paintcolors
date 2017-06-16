@@ -70,50 +70,54 @@ export default class Page extends Component {
     </div>
   }
 
-  stateSetter(field) {
-    return (e) => {
+  renderSlider(opts={}) {
+    let update = (e) => {
       this.setState({
-        [field]: +e.target.value
+        [opts.field]: +e.target.value
       })
     }
+
+    return <label>
+      {opts.label}
+      <input
+        value={this.state[opts.field]}
+        onInput={update}
+        onChange={update}
+        type="range" min={opts.min} max={opts.max} step={opts.step} />
+    </label>
   }
 
   renderGridControls() {
     return <div class="grid_controls">
       <button onClick={e => this.forceUpdate()}>Shuffle</button>
       <div>
-        <label>
-          Grid size
-          <input
-            value={this.state.gridSize}
-            onInput={this.stateSetter("gridSize")}
-            onChange={this.stateSetter("gridSize")}
-            type="range" min="1" max="10" />
-        </label>
+        {this.renderSlider({
+          label: "Grid size",
+          field: "gridSize",
+          min: 1,
+          max: 10,
+        })}
       </div>
 
       <div>
-        <label>
-          Min value
-          <input
-            value={this.state.minValue}
-            onInput={this.stateSetter("minValue")}
-            onChange={this.stateSetter("minValue")}
-            type="range" min="0" max="1" step="any" />
-        </label>
+        {this.renderSlider({
+          label: "Min value",
+          field: "minValue",
+          min: 0,
+          max: 1,
+          step: "any"
+        })}
       </div>
 
       <div>
-        <label>
-          Min saturation
-          <input
-            value={this.state.minSaturation}
-            onInput={this.stateSetter("minSaturation")}
-            onChange={this.stateSetter("minSaturation")}
-            type="range" min="0" max="1" step="any" />
-        </label>
+        {this.renderSlider({
+          label: "Min saturation",
+          field: "minSaturation",
+          min: 0,
+          max: 1,
+          step: "any"
+        })}
       </div>
-
     </div>
   }
 }
