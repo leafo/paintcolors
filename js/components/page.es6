@@ -174,6 +174,15 @@ export default class Page extends Component {
   renderGridControls() {
     return <div class="grid_controls">
       <button onClick={e => this.shuffle()}>Shuffle</button>
+
+      <select
+        onChange={e => this.setState({mode: e.target.value})}
+        value={this.state.mode}
+      >
+        <option value="random">random</option>
+        <option value="corners">corners</option>
+      </select>
+
       <div>
         {this.renderSlider({
           label: "Grid size",
