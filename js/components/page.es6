@@ -91,9 +91,25 @@ export default class Page extends Component {
   }
 
   nextColor(i) {
+    let x = (i % this.state.gridSize) / (this.state.gridSize - 1)
+    let y = Math.floor(i / this.state.gridSize) / (this.state.gridSize - 1)
+
     switch (this.state.mode) {
       case "random":
         return this.getNColors(1)[0]
+      case "single":
+        if (!this.cache.single) {
+          this.cache.single = this.getNColors(1)[0]
+        }
+
+        let [h,s,v] = this.cache.single
+
+        return [
+          h + x / 10,
+          Math.max(s, 0.1) + y / 10,
+          Math.max(v, 0.1) + y / 10 + x / 10,
+        ]
+
       case "corners":
         if (!this.cache.corners) {
           this.cache.corners = this.getNColors(4)
@@ -110,8 +126,6 @@ export default class Page extends Component {
 
         let [tl, tr, bl, br] = this.cache.corners
 
-        let x = (i % this.state.gridSize) / (this.state.gridSize - 1)
-        let y = Math.floor(i / this.state.gridSize) / (this.state.gridSize - 1)
 
         // mix y
         let leftColor = mixColors(tl, bl, y)
@@ -181,6 +195,7 @@ export default class Page extends Component {
       >
         <option value="random">random</option>
         <option value="corners">corners</option>
+        <option value="single">single</option>
       </select>
 
       <div>
