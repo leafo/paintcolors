@@ -241,6 +241,7 @@ export default class Page extends Component {
   renderGridControls() {
     return <div class="grid_controls">
       <button onClick={e => this.shuffle()}>Shuffle</button>
+      {" "}
 
       <select
         onChange={e => this.setState({mode: e.target.value})}
@@ -249,6 +250,16 @@ export default class Page extends Component {
         <option value="random">random</option>
         <option value="corners">corners</option>
         <option value="single">single</option>
+      </select>
+
+      {" "}
+
+      <select
+        onChange={e => this.setState({mixMode: e.target.value})}
+        value={this.state.mixMode}
+      >
+        <option value="hsv">hsv</option>
+        <option value="rgb">rgb</option>
       </select>
 
       <div>
