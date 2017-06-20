@@ -88,6 +88,23 @@ function mixColorsRGB(a, b, r) {
   let [br, bg, bb] = hsvToRgb(...b)
 
   return rgbToHsv(...[
+    // Math.sqrt(ar**2 * r + br**2 * (1 - r)),
+    // Math.sqrt(ag**2 * r + bg**2 * (1 - r)),
+    // Math.sqrt(ab**2 * r + bb**2 * (1 - r))
+
+    ar * r + br * (1 - r),
+    ag * r + bg * (1 - r),
+    ab * r + bb * (1 - r)
+  ])
+}
+
+function mixColorsRGBRoot(a, b, r) {
+  r = 1 - r
+
+  let [ar, ag, ab] = hsvToRgb(...a)
+  let [br, bg, bb] = hsvToRgb(...b)
+
+  return rgbToHsv(...[
     Math.sqrt(ar**2 * r + br**2 * (1 - r)),
     Math.sqrt(ag**2 * r + bg**2 * (1 - r)),
     Math.sqrt(ab**2 * r + bb**2 * (1 - r))
@@ -140,6 +157,9 @@ export default class Page extends Component {
         break;
       case "rgb":
         colorMix = mixColorsRGB
+        break;
+      case "rgb_root":
+        colorMix = mixColorsRGBRoot
         break;
     }
 
@@ -260,6 +280,7 @@ export default class Page extends Component {
       >
         <option value="hsv">hsv</option>
         <option value="rgb">rgb</option>
+        <option value="rgb_root">rgb_root</option>
       </select>
 
       <div>
