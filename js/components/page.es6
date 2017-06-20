@@ -84,10 +84,10 @@ function mixColorsHSV(a, b, r) {
 function mixColorsRGB(a, b, r) {
   r = 1 - r
 
-  let [ar, ag, ab] = hsvToRgb(a)
-  let [br, bg, bb] = hsvToRgb(b)
+  let [ar, ag, ab] = hsvToRgb(...a)
+  let [br, bg, bb] = hsvToRgb(...b)
 
-  return rgbToHsv([
+  return rgbToHsv(...[
     Math.sqrt(ar**2 * r + br**2 * (1 - r)),
     Math.sqrt(ag**2 * r + bg**2 * (1 - r)),
     Math.sqrt(ab**2 * r + bb**2 * (1 - r))

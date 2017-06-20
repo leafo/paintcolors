@@ -31,7 +31,7 @@ body {
 
         > * {
             position: absolute;
-            z-index: 1000;
+            z-index: 10;
             top: 50%;
             left: 50%;
             transition: opacity 0.2s ease;
@@ -48,4 +48,10 @@ body {
             -webkit-text-stroke-color: black;
         }
     }
+}
+
+.grid_controls {
+    margin-top: 10px;
+    position: relative;
+    z-index: 11;
 }
