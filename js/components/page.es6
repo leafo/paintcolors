@@ -53,7 +53,7 @@ function rgbToHsv(r, g, b) {
 }
 
 // colors must be in hsv
-function mixColors(a, b, r) {
+function mixColorsHSV(a, b, r) {
   r = 1 - r
 
   // see if it wraps
@@ -82,16 +82,27 @@ function mixColors(a, b, r) {
 
 // mix in rgb space
 function mixColorsRGB(a, b, r) {
+  r = 1 - r
+
+  let [ar, ag, ab] = hsvToRgb(a)
+  let [br, bg, bb] = hsvToRgb(b)
+
+  return rgbToHsv([
+    Math.sqrt(ar**2 * r + br**2 * (1 - r)),
+    Math.sqrt(ag**2 * r + bg**2 * (1 - r)),
+    Math.sqrt(ab**2 * r + bb**2 * (1 - r))
+  ])
 }
 
 export default class Page extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      gridSize: 3,
+      gridSize: 4,
       minValue: 0,
       minSaturation: 0,
       mode: "corners",
+      mixMode: "rgb",
       seed: new Date().getTime()
     }
   }
@@ -121,6 +132,20 @@ export default class Page extends Component {
   nextColor(i) {
     let x = (i % this.state.gridSize) / (this.state.gridSize - 1)
     let y = Math.floor(i / this.state.gridSize) / (this.state.gridSize - 1)
+
+    let colorMix
+    switch (this.state.mixMode) {
+      case "hsv":
+        colorMix = mixColorsHSV
+        break;
+      case "rgb":
+        colorMix = mixColorsRGB
+        break;
+    }
+
+    if (!colorMix) {
+      console.error("Failed to get color mix for: " + this.state.mixMode)
+    }
 
     switch (this.state.mode) {
       case "random":
@@ -156,10 +181,10 @@ export default class Page extends Component {
 
 
         // mix y
-        let leftColor = mixColors(tl, bl, y)
-        let rightColor = mixColors(tr, br, y)
+        let leftColor = colorMix(tl, bl, y)
+        let rightColor = colorMix(tr, br, y)
 
-        return mixColors(leftColor, rightColor, x)
+        return colorMix(leftColor, rightColor, x)
     }
   }
 
