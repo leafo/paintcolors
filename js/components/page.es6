@@ -28,6 +28,30 @@ function hsvToRgb(h, s, v) {
   ]
 }
 
+function rgbToHsv(r, g, b) {
+  r /= 255, g /= 255, b /= 255;
+
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, v = max;
+
+  var d = max - min;
+  s = max == 0 ? 0 : d / max;
+
+  if (max == min) {
+    h = 0; // achromatic
+  } else {
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+
+    h /= 6;
+  }
+
+  return [ h, s, v ];
+}
+
 // colors must be in hsv
 function mixColors(a, b, r) {
   r = 1 - r
@@ -54,6 +78,10 @@ function mixColors(a, b, r) {
   let v = a[2] * r + b[2] * (1 - r)
 
   return [h,s,v]
+}
+
+// mix in rgb space
+function mixColorsRGB(a, b, r) {
 }
 
 export default class Page extends Component {
