@@ -258,6 +258,14 @@ export default class Page extends Component {
     </label>
   }
 
+  loadImage(imageUrl) {
+    let image = document.createElement("img")
+    image.src = imageUrl
+    image.onLoad = () => {
+      console.warn("image is ready")
+    }
+  }
+
   renderGridControls() {
     return <div class="grid_controls">
       <button onClick={e => this.shuffle()}>Shuffle</button>
@@ -282,6 +290,13 @@ export default class Page extends Component {
         <option value="rgb">rgb</option>
         <option value="rgb_root">rgb_root</option>
       </select>
+
+      <input
+        type="text"
+        placeholder="image_url"
+        value={this.state.imageUrl || ""}
+        onChange={e => this.setState({imageUrl: e.target.value})}
+        />
 
       <div>
         {this.renderSlider({
